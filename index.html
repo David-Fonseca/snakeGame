@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Snake Game</title>
+  <title>Basic Snake HTML Game</title>
   <meta charset="UTF-8">
   <style>
   html, body {
@@ -26,19 +26,15 @@
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 
-
 var grid = 16;
 var count = 0;
 
 var snake = {
   x: 160,
   y: 160,
-
   dx: grid,
   dy: 0,
-
   cells: [],
-
   maxCells: 4
 };
 var apple = {
@@ -53,15 +49,15 @@ function getRandomInt(min, max) {
 function loop() {
   requestAnimationFrame(loop);
 
-  if (++count < 4) {
+  if (++count < 15) {
     return;
   }
 
   count = 0;
   context.clearRect(0,0,canvas.width,canvas.height);
 
-  snake.x += snake.dx/2;
-  snake.y += snake.dy/2;
+  snake.x += snake.dx;
+  snake.y += snake.dy;
 
   if (snake.x < 0) {
     snake.x = canvas.width - grid;
@@ -69,7 +65,6 @@ function loop() {
   else if (snake.x >= canvas.width) {
     snake.x = 0;
   }
-
 
   if (snake.y < 0) {
     snake.y = canvas.height - grid;
@@ -84,10 +79,8 @@ function loop() {
     snake.cells.pop();
   }
 
-
   context.fillStyle = 'red';
   context.fillRect(apple.x, apple.y, grid-1, grid-1);
-
 
   context.fillStyle = 'green';
   snake.cells.forEach(function(cell, index) {
@@ -117,32 +110,36 @@ function loop() {
     }
   });
 }
-
+// listen to keyboard events to move the snake
 document.addEventListener('keydown', function(e) {
+  // prevent snake from backtracking on itself by checking that it's
+  // not already moving on the same axis (pressing left while moving
+  // left won't do anything, and pressing right while moving left
+  // shouldn't let you collide with your own body)
 
-
+  // left arrow key
   if (e.which === 37 && snake.dx === 0) {
     snake.dx = -grid;
     snake.dy = 0;
   }
-
+  // up arrow key
   else if (e.which === 38 && snake.dy === 0) {
     snake.dy = -grid;
     snake.dx = 0;
   }
-
+  // right arrow key
   else if (e.which === 39 && snake.dx === 0) {
     snake.dx = grid;
     snake.dy = 0;
   }
-
+  // down arrow key
   else if (e.which === 40 && snake.dy === 0) {
     snake.dy = grid;
     snake.dx = 0;
   }
 });
 
-
+// start the game
 requestAnimationFrame(loop);
 </script>
 </body>
